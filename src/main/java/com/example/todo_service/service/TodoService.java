@@ -75,5 +75,6 @@ public class TodoService {
                 OffsetDateTime.now());
 
         overdueItems.forEach(TodoItem::markPastDue);
+        overdueItems.forEach(repository::save);
     }
 }
