@@ -2,7 +2,7 @@
 
 A backend REST API service for managing simple todo tasks with Spring Boot and JPA.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Technology Stack](#technology-stack)
@@ -82,7 +82,7 @@ todo-service/
 └── README.md                                      # This file
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -225,6 +225,8 @@ http://localhost:8080
 
 ### Request/Response Examples
 
+> **Note for Windows Users**: When using curl commands on Windows, it's recommended to use **Git Bash** terminal instead of PowerShell or CMD for better compatibility with the curl syntax shown in this README. Alternatively, you can use PowerShell's `Invoke-RestMethod` cmdlet.
+
 #### Create Todo
 
 ```bash
@@ -294,25 +296,54 @@ Response: 204 No Content
 
 #### Todo Not Found (404)
 
+Request:
+
+```bash
+curl http://localhost:8080/todos/999
+```
+
+Response (404 Not Found):
+
 ```json
 {
-  "timestamp": "2026-01-28T19:00:00Z",
-  "status": 404,
-  "error": "Not Found",
-  "message": "Todo with ID 999 not found",
-  "path": "/todos/999"
+  "message": "Todo with ID 999 not found"
 }
 ```
 
-#### Invalid State (400)
+#### Invalid State - Modifying Past-Due Todo (409)
+
+Request:
+
+```bash
+curl -X PATCH http://localhost:8080/todos/1/done
+```
+
+Response (409 Conflict):
+
+```json
+{
+  "message": "Past-due items cannot be modified"
+}
+```
+
+#### Bad Request - Invalid JSON (400)
+
+Request:
+
+```bash
+curl -X POST http://localhost:8080/todos \
+  -H "Content-Type: application/json" \
+  -d '{"description": ""}'
+```
+
+Response (400 Bad Request):
 
 ```json
 {
   "timestamp": "2026-01-28T19:00:00Z",
   "status": 400,
   "error": "Bad Request",
-  "message": "Past-due items cannot be modified",
-  "path": "/todos/1/done"
+  "path": "/todos"
 }
 ```
 
