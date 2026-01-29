@@ -225,6 +225,11 @@ http://localhost:8080
 
 ### Request/Response Examples
 
+## Edge Cases and Behavioral Decisions
+
+- Creating a todo with a due time in the past or exactly now is allowed. The todo is created as `NOT_DONE`, and the scheduler (runs every minute) will mark it `DONE`.
+- Status transitions are idempotent: calling "mark done" on an already `DONE` item or "mark not done" on an already `NOT_DONE` item returns success without error.
+
 > **Note for Windows Users**: When using curl commands on Windows, it's recommended to use **Git Bash** terminal instead of PowerShell or CMD for better compatibility with the curl syntax shown in this README. Alternatively, you can use PowerShell's `Invoke-RestMethod` cmdlet.
 
 #### Create Todo
@@ -378,4 +383,4 @@ http://localhost:8080/h2-console
 
 ### Scheduled Tasks
 
-The application includes a scheduler that runs every 5 minutes to automatically mark overdue todos as `PAST_DUE`. See `PastDueTodoScheduler.java`.
+The application includes a scheduler that runs every minute to automatically mark overdue todos as `PAST_DUE`. See `PastDueTodoScheduler.java`.
